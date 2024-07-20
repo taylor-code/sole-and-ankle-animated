@@ -12,7 +12,7 @@ const ShoeCard = ({
   price,
   salePrice,
   releaseDate,
-  numOfColors,
+  numOfColors
 }) => {
   // There are 3 variants possible, based on the props:
   //   - new-release
@@ -36,22 +36,18 @@ const ShoeCard = ({
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
-          {variant === 'on-sale' && <SaleFlag>Sale</SaleFlag>}
-          {variant === 'new-release' && (
-            <NewFlag>Just released!</NewFlag>
-          )}
         </ImageWrapper>
+        {variant === 'on-sale' && <SaleFlag>Sale</SaleFlag>}
+        {variant === 'new-release' && <NewFlag>Just released!</NewFlag>}
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
           <Price
             style={{
               '--color':
-                variant === 'on-sale'
-                  ? 'var(--color-gray-700)'
-                  : undefined,
+                variant === 'on-sale' ? 'var(--color-gray-700)' : undefined,
               '--text-decoration':
-                variant === 'on-sale' ? 'line-through' : undefined,
+                variant === 'on-sale' ? 'line-through' : undefined
             }}
           >
             {formatPrice(price)}
@@ -73,15 +69,30 @@ const Link = styled.a`
   color: inherit;
 `;
 
-const Wrapper = styled.article``;
-
-const ImageWrapper = styled.div`
+const Wrapper = styled.article`
   position: relative;
 `;
 
-const Image = styled.img`
-  width: 100%;
+const ImageWrapper = styled.div`
   border-radius: 16px 16px 4px 4px;
+  /* Image zooms in on hover/focus, truncate the spillover. */
+  overflow: hidden;
+`;
+
+const Image = styled.img`
+  display: block;
+  transform-origin: 50% 75%;
+  transition: transform 600ms;
+  width: 100%;
+  will-change: transform;
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    ${Link}:hover &,
+    ${Link}:focus & {
+      transform: scale(1.1);
+      transition: transform 200ms;
+    }
+  }
 `;
 
 const Row = styled.div`
